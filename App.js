@@ -1,85 +1,34 @@
-import React, { Component } from "react";
+import React from "react";
 import {
   View,
-  Text,
   Platform,
-  TouchableOpacity,
   Animated,
   StyleSheet,
-  Image
 } from "react-native";
 
 const DRAWER_WIDTH = 300;
 import Swipe from './src/components/Swipe'
-import Drawer from './src/components/Drawer'
 
-export default class App extends Component {
-  constructor() {
-    super();
-    this.animatedValue = new Animated.Value(0);
-    this.state = {
-      disabled: false
-    };
-    this.toogleFlag = 0;
-  }
+export default function App() {
+  let animatedValue = new Animated.Value(0)
 
-  toggleDrawer = () => {
-    if (this.toogleFlag === 0) {
-      this.setState({ disabled: true }, () => {
-        Animated.timing(this.animatedValue, {
-          toValue: 1,
-          duration: 250
-        }).start(() => {
-          this.setState({ disabled: false });
-          this.toogleFlag = 1;
-        });
-      });
-    } else {
-      this.setState({ disabled: true }, () => {
-        Animated.timing(this.animatedValue, {
-          toValue: 0,
-          duration: 250
-        }).start(() => {
-          this.setState({ disabled: false });
-          this.toogleFlag = 0;
-        });
-      });
-    }
-  };
+  const animated = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [DRAWER_WIDTH - 46, 0]
+  })
 
-  render() {
-    const animatedValue = this.animatedValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [DRAWER_WIDTH - 46, 0]
-    });
-
-    return (
-      <View style={styles.container}>
-        <Swipe />
-        <Animated.View
-          style={[
-            styles.drawer,
-            { transform: [{ translateX: animatedValue }] }
-          ]}
-        >
-          <TouchableOpacity
-            disabled={this.state.disabled}
-            onPress={this.toggleDrawer}
-            style={{ padding: 8 }}
-          >
-            <Image
-              source={require("./src/assets/hamburger.png")}
-              style={{ width: 30, height: 30, resizeMode: "contain" }}
-            />
-          </TouchableOpacity>
-          <View style={styles.drawerContainer}>
-            {/*<Text style={styles.text}>Your Content goes here...</Text>*/}
-            <Drawer />
-          </View>
-        </Animated.View>
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container}>
+      <Swipe />
+      <Animated.View
+        style={[
+          styles.drawer,
+          { transform: [{ translateX: animated }] }
+        ]}
+      >
+      </Animated.View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   StyleSheet, 
   Text, 
@@ -20,86 +20,77 @@ const Users = [
   { id: "5", uri: require('../assets/5.jpg'), name: '5' },
 ]
 
-export default class Swipe extends React.Component {
+//export default class Swipe extends React.Component {
+export default function Swipe() {
 
-  constructor() {
-    super()
-
-    this.position = new Animated.ValueXY()
-    this.state = {
-      currentIndex: 0,
-      confirmed: []
-    }
-
-    this.rotate = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: ['-10deg', '0deg', '10deg'],
-      extrapolate: 'clamp'
-    })
-
-    this.rotateAndTranslate = {
-      transform: [{
-        rotate: this.rotate
-      },
-      ...this.position.getTranslateTransform()
-      ]
-    }
-
-    this.likeOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [0, 0, 1],
-      extrapolate: 'clamp'
-    })
-    this.dislikeOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0, 0],
-      extrapolate: 'clamp'
-    })
-
-    this.nextCardOpacity = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0, 1],
-      extrapolate: 'clamp'
-    })
-    this.nextCardScale = this.position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
-      outputRange: [1, 0.8, 1],
-      extrapolate: 'clamp'
-    })
-
+  let panResponder = generatePanRespond()
+  let position = new Animated.ValueXY()
+  let rotate = position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: ['-10deg', '0deg', '10deg'],
+    extrapolate: 'clamp'
+  })
+  let rotateAndTranslate = {
+    transform: [{rotate: rotate},
+    ...position.getTranslateTransform()
+    ]
   }
-  componentWillMount() {
-    this.PanResponder = PanResponder.create({
+  likeOpacity = position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: [0, 0, 1],
+    extrapolate: 'clamp'
+  })
+  dislikeOpacity = position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: [1, 0, 0],
+    extrapolate: 'clamp'
+  })
+
+  nextCardOpacity = position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: [1, 0, 1],
+    extrapolate: 'clamp'
+  })
+  nextCardScale = position.x.interpolate({
+    inputRange: [-SCREEN_WIDTH / 2, 0, SCREEN_WIDTH / 2],
+    outputRange: [1, 0.8, 1],
+    extrapolate: 'clamp'
+  })
+
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [confirmed, setConfirmed] = useState([])
+
+    
+  function generatePanRespond () {
+    return PanResponder.create({
 
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onPanResponderMove: (evt, gestureState) => {
 
-        this.position.setValue({ x: gestureState.dx, y: gestureState.dy })
+        position.setValue({ x: gestureState.dx, y: gestureState.dy })
       },
       onPanResponderRelease: (evt, gestureState) => {
 
         if (gestureState.dx > 120) {
-          this.confirmEvent()
-          Animated.spring(this.position, {
+          confirmEvent()
+          Animated.spring(position, {
             toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
           }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-              this.position.setValue({ x: 0, y: 0 })
-            })
+            setCurrentIndex(currentIndex + 1)
+            position.setValue({ x: 0, y: 0 }) 
           })
         }
         else if (gestureState.dx < -120) {
-          this.cancelEvent()
-          Animated.spring(this.position, {
+          cancelEvent()
+          Animated.spring(position, {
             toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy }
           }).start(() => {
-            this.setState({ currentIndex: this.state.currentIndex + 1 }, () => {
-              this.position.setValue({ x: 0, y: 0 })
-            })
+            setCurrentIndex(currentIndex + 1)
+            position.setValue({ x: 0, y: 0 })
           })
         }
         else {
-          Animated.spring(this.position, {
+          Animated.spring(position, {
             toValue: { x: 0, y: 0 },
             friction: 4
           }).start()
@@ -108,23 +99,23 @@ export default class Swipe extends React.Component {
     })
   }
 
-  renderUsers = () => {
+  const renderUsers = () => {
     return Users.map((item, i) => {
-      if (i < this.state.currentIndex) {
+      if (i < currentIndex) {
         return null
       }
-      else if (i == this.state.currentIndex) {
+      else if (i == currentIndex) {
 
         return (
           <Animated.View
-            {...this.PanResponder.panHandlers}
-            key={item.id} style={[this.rotateAndTranslate, styles.animatedView]}>
-            <Animated.View style={{ opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
+            {...panResponder.panHandlers}
+            key={item.id} style={[rotateAndTranslate, styles.animatedView]}>
+            <Animated.View style={{ opacity: likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>YES</Text>
 
             </Animated.View>
 
-            <Animated.View style={{ opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
+            <Animated.View style={{ opacity: dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
               <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
 
             </Animated.View>
@@ -141,8 +132,8 @@ export default class Swipe extends React.Component {
           <Animated.View
 
             key={item.id} style={[{
-              opacity: this.nextCardOpacity,
-              transform: [{ scale: this.nextCardScale }],
+              opacity: nextCardOpacity,
+              transform: [{ scale: nextCardScale }],
               height: SCREEN_HEIGHT / 2, width: SCREEN_WIDTH, padding: 10, position: 'absolute'
             }]}>
             <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
@@ -165,42 +156,38 @@ export default class Swipe extends React.Component {
     }).reverse()
   }
 
-  confirmEvent = () => {
-    let newArray = [...this.state.confirmed]
-    newArray.concat(Users[this.state.currentIndex])
-    this.setState({
-      confirmed: newArray
-    })
+  const confirmEvent = () => {
+    let newArray = [...confirmed]
+    newArray.concat(Users[currentIndex])
+    setConfirmed(newArray)
   }
 
-  cancelEvent = () => {
+  const cancelEvent = () => {
     alert('no')
   }
 
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: 60 }}>
-
-        </View>
-        <View style={{ flex: 1 }}>
-          {this.renderUsers()}
-        </View>
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.btnText} onPress={this.cancelEvent}>NOPE</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.button} onPress={this.confirmEvent}>
-            <Text style={styles.btnText}>YES</Text>
-          </TouchableOpacity>
-        </View>
-
+  return (
+    <View style={{ flex: 1 }}>
+      <View style={{ height: 60 }}>
 
       </View>
+      <View style={{ flex: 1 }}>
+        {renderUsers()}
+      </View>
+      <View style={styles.footer}>
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.btnText} onPress={cancelEvent}>NOPE</Text>
+        </TouchableOpacity>
 
-    );
-  }
+        <TouchableOpacity style={styles.button} onPress={confirmEvent}>
+          <Text style={styles.btnText}>YES</Text>
+        </TouchableOpacity>
+      </View>
+
+
+    </View>
+
+  );
 }
 
 const styles = StyleSheet.create({
