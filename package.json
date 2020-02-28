@@ -8,6 +8,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "eslint-utils": "^2.0.0",
+    "handlebars": "^4.7.3",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-material-letter-icon": "0.0.3",
