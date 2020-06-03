@@ -1,4 +1,12 @@
-//
+#import <React/RCTBridgeModule.h>
+
+@interface RCT_EXTERN_MODULE(RNCalendar, NSObject)
+
+RCT_EXTERN_METHOD(addEvent:(NSString *)name startDate:(NSString *)starDate duration:(NSNumber *)duration description:(NSString *)description callback:(RCTResponseSenderBlock)callback)
+
+@end
+
+/*
 //  RNCalendar.m
 //  partiu
 //
@@ -21,7 +29,7 @@ RCT_EXPORT_METHOD(addEvent:(NSString *)name location:(NSString *)location date:(
   NSString *message = [NSString stringWithFormat:@"%@:%@ at %@", @"Pretending to create an event", name, location];
   
   NSDate *date = [RCTConvert NSDate:ISO8601DateString];
-  /*EKEventStore *store = [EKEventStore new];
+  EKEventStore *store = [EKEventStore new];
   [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError * error) {
     if (!granted) { return; }
     EKEvent *event = [EKEvent eventWithEventStore:store];
@@ -31,9 +39,10 @@ RCT_EXPORT_METHOD(addEvent:(NSString *)name location:(NSString *)location date:(
     event.calendar = [store defaultCalendarForNewEvents];
     NSError *err = nil;
     [store saveEvent:event span:EKSpanThisEvent commit:YES error:&err];
-  }];*/
+  }];
   
   callback(@[message]);
 }
 
 @end
+*/

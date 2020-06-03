@@ -5,4 +5,6 @@ Using to learn using bridges using Native Modules
 
 ### Todo
 - [x] Basic Native Modules
-- [ ] Create Native Calendar module
+- [x] Create Native Calendar module IOS
+- [ ] Convert Date 
+- [ ] Create Native Calendar module Android

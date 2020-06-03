@@ -299,8 +299,9 @@ export default function Swipe() {
       let RNCalendar = NativeModules.RNCalendar;
       RNCalendar.addEvent(
         Users[currentIndex].name,
-        "Casa",
         date.toISOString(),
+        4.0,
+        "Rua X nº 123",
         (callback) => {
           alert(callback);
         }
