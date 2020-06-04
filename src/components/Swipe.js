@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   NativeModules,
   Platform,
+  PermissionsAndroid,
 } from "react-native";
 import styles from "./style";
 
@@ -310,11 +311,36 @@ export default function Swipe() {
       //  alert(callback);
       //});
     } else {
-      let ToastExample = NativeModules.ToastExample;
-      ToastExample.show("Awesome", ToastExample.SHORT);
+      requestCalendarPermission()
     }
     setConfirmed(newArray);
   };
+
+  const addEvent = () => {
+    let ToastExample = NativeModules.ToastExample;
+      ToastExample.show("Awesome", ToastExample.SHORT);
+  }
+
+  const requestCalendarPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_CALENDAR, {
+          title: 'Partiu deseja acesso ao seu Calendário',
+          message: "É necessário o acesso ao calendário para adicionar os eventos que você vai ir",
+          buttonPositive: "Ok",
+          buttonNegative: "Não"
+        }
+      )
+
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        addEvent()
+      } else {
+        alert("Erro")
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
 
   const cancelEvent = () => {
     alert("no");
