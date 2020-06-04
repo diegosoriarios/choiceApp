@@ -22,31 +22,31 @@ const Users = [
     id: "1",
     uri: require("../assets/1.jpg"),
     name: "1",
-    date: "Jun 22,2020 11:20:00",
+    date: "June 22,2020 11:20:00",
   },
   {
     id: "2",
     uri: require("../assets/2.jpg"),
     name: "2",
-    date: "Jun 23,2020 11:20:00",
+    date: "June 23,2020 11:20:00",
   },
   {
     id: "3",
     uri: require("../assets/3.jpg"),
     name: "3",
-    date: "Jun 24,2020 11:20:00",
+    date: "June 24,2020 11:20:00",
   },
   {
     id: "4",
     uri: require("../assets/4.jpg"),
     name: "4",
-    date: "Jun 25,2020 11:20:00",
+    date: "June 25,2020 11:20:00",
   },
   {
     id: "5",
     uri: require("../assets/5.jpg"),
     name: "5",
-    date: "Jun 26,2020 11:20:00",
+    date: "June 26,2020 11:20:00",
   },
 ];
 
@@ -299,7 +299,7 @@ export default function Swipe() {
       let RNCalendar = NativeModules.RNCalendar;
       RNCalendar.addEvent(
         Users[currentIndex].name,
-        date.toISOString(),
+        date.getTime(),
         4.0,
         "Rua X nº 123",
         (callback) => {

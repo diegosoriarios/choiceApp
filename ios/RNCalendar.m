@@ -2,7 +2,7 @@
 
 @interface RCT_EXTERN_MODULE(RNCalendar, NSObject)
 
-RCT_EXTERN_METHOD(addEvent:(NSString *)name startDate:(NSString *)starDate duration:(NSNumber *)duration description:(NSString *)description callback:(RCTResponseSenderBlock)callback)
+RCT_EXTERN_METHOD(addEvent:(NSString *)name startDate:(nonnull NSNumber *)starDate duration:(NSNumber *)duration description:(NSString *)description callback:(RCTResponseSenderBlock)callback)
 
 @end
 

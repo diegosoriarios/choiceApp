@@ -13,15 +13,17 @@ import EventKit
 class RNCalendar: NSObject {
   
   @objc(addEvent:startDate:duration:description:callback:)
-  func addEvent(name: String, startDate: String, duration: Double, description: String, callback: RCTResponseSenderBlock) -> Void {
+  func addEvent(name: String, startDate: NSNumber, duration: Double, description: String, callback: RCTResponseSenderBlock) -> Void {
     let eventStore = EKEventStore()
+    let timeInterval = Double(truncating: startDate)/1000
+    let date = Date(timeIntervalSince1970: timeInterval)
     
     switch EKEventStore.authorizationStatus(for: .event) {
       case .authorized:
         let response = insertEvent(
           store: eventStore,
           title: name,
-          startDate: Date(),
+          startDate: date,
           duration: duration,
           description: description
         )
@@ -35,7 +37,7 @@ class RNCalendar: NSObject {
               _ = self!.insertEvent(
                 store: eventStore,
                 title: name,
-                startDate: Date(),
+                startDate: date,
                 duration: duration,
                 description: description
               )
