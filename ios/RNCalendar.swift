@@ -13,7 +13,7 @@ import EventKit
 class RNCalendar: NSObject {
   
   @objc(addEvent:startDate:duration:description:callback:)
-  func addEvent(name: String, startDate: NSNumber, duration: Double, description: String, callback: RCTResponseSenderBlock) -> Void {
+  func addEvent(name: String, startDate: NSNumber, duration: NSNumber, description: String, callback: RCTResponseSenderBlock) -> Void {
     let eventStore = EKEventStore()
     let timeInterval = Double(truncating: startDate)/1000
     let date = Date(timeIntervalSince1970: timeInterval)
@@ -24,7 +24,7 @@ class RNCalendar: NSObject {
           store: eventStore,
           title: name,
           startDate: date,
-          duration: duration,
+          duration: Double(truncating: duration),
           description: description
         )
         callback([response])
@@ -38,7 +38,7 @@ class RNCalendar: NSObject {
                 store: eventStore,
                 title: name,
                 startDate: date,
-                duration: duration,
+                duration: Double(truncating: duration),
                 description: description
               )
             } else {
