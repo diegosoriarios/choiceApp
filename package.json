@@ -11,7 +11,7 @@
     "eslint-utils": "^2.0.0",
     "handlebars": "^4.7.3",
     "react": "16.8.6",
-    "react-native": "0.60.4",
+    "react-native": "^0.62.2",
     "react-native-material-letter-icon": "0.0.3",
     "react-native-navigation-drawer-layout": "0.0.7",
     "react-native-svg": "^9.5.3",
