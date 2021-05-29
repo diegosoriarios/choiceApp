@@ -16,7 +16,7 @@
     "react-native-navigation-drawer-layout": "0.0.7",
     "react-native-svg": "^9.5.3",
     "react-native-vector-icons": "^6.6.0",
-    "ws": "^7.1.1"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
